@@ -1,0 +1,3 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://dbpostgresql:5432/crmdb

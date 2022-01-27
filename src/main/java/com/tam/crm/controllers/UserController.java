@@ -17,13 +17,13 @@ import java.util.List;
 
 @Api(tags = "Admin")
 @RestController
-@RequestMapping(value = "v1/admin")
-public class AdminController {
+@RequestMapping(value = "v1/admin/users")
+public class UserController {
 
 	@Autowired
 	private AdminService service;
 
-	@GetMapping
+	@GetMapping()
 	public List<User> getUsers() {
 		return service.getUsers();
 	}
@@ -33,7 +33,7 @@ public class AdminController {
 		return service.createUser(user);
 	}
 
-	@PutMapping("{id}")
+	@PutMapping()
 	public void updateUser(@RequestBody User user) {
 		service.updateUser(user);
 	}
@@ -43,8 +43,8 @@ public class AdminController {
 		service.deleteUser(id);
 	}
 
-	@PutMapping("{status}")
-	public void setAdminStatus(@PathVariable boolean status) {
-		service.setAdminStatus(status);
+	@PutMapping("{id}/admin/{status}")
+	public void setAdminStatus(@PathVariable Long id,@PathVariable boolean status) {
+		service.setAdminStatus(id,status);
 	}
 }

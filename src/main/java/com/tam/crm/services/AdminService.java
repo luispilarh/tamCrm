@@ -14,9 +14,9 @@ public interface AdminService {
 
 	void deleteUser(Long id);
 
-	void setAdminStatus(boolean status);
+	void setAdminStatus(Long id, boolean status);
 
-	boolean isAdmin(String id);
+	boolean isAdmin(Long id);
 
 	User getUser(String gitHubLogin) throws UnregisteredUserException;
 }

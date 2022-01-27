@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+#  mvc:
+#    pathmatch:
+#      matching-strategy: ant_path_matcher
+  flyway:
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: 14d5ce5254da72488513
+            clientSecret: 3ca901216bfbcc29513ba5b7c90d3726dcb59892
+admin:
+  paths: /v1/admin
+auth:
+  paths: /v1
