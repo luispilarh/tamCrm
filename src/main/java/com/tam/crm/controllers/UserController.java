@@ -1,5 +1,8 @@
 package com.tam.crm.controllers;
 
+import com.tam.crm.exception.CrmDataException;
+import com.tam.crm.model.NewUser;
+import com.tam.crm.model.UpdateUser;
 import com.tam.crm.model.User;
 import com.tam.crm.services.AdminService;
 import io.swagger.annotations.Api;
@@ -15,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Api(tags = "Admin")
+@Api(tags = "Users")
 @RestController
-@RequestMapping(value = "v1/admin/users")
+@RequestMapping(value = "v1/users")
 public class UserController {
 
 	@Autowired
@@ -29,22 +32,22 @@ public class UserController {
 	}
 
 	@PostMapping()
-	public User createUser(@RequestBody User user) {
+	public User createUser(@RequestBody NewUser user) throws CrmDataException {
 		return service.createUser(user);
 	}
 
-	@PutMapping()
-	public void updateUser(@RequestBody User user) {
-		service.updateUser(user);
+	@PutMapping("{id}")
+	public void updateUser(@PathVariable Long id, @RequestBody UpdateUser user) throws CrmDataException {
+		service.updateUser(id, user);
 	}
 
 	@DeleteMapping("{id}")
-	public void deleteUser(@PathVariable Long id) {
+	public void deleteUser(@PathVariable Long id) throws CrmDataException {
 		service.deleteUser(id);
 	}
 
 	@PutMapping("{id}/admin/{status}")
-	public void setAdminStatus(@PathVariable Long id,@PathVariable boolean status) {
-		service.setAdminStatus(id,status);
+	public void setAdminStatus(@PathVariable Long id, @PathVariable boolean status) throws CrmDataException {
+		service.setAdminStatus(id, status);
 	}
 }

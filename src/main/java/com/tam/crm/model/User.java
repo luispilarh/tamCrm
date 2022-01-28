@@ -1,10 +1,11 @@
 package com.tam.crm.model;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
-public class User {
-	private String login;
-	private boolean admin;
-	private Integer id;
+@RequiredArgsConstructor
+public class User  extends NewUser{
+
+	private Long id;
 }

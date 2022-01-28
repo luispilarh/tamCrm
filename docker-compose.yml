@@ -13,15 +13,20 @@ services:
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
-      - POSTGRES_URL=jdbc:postgresql://dbpostgresql:5432/crmdb
+      - POSTGRES_URL=jdbc:postgresql://dbpostgresql:5432/postgres
   dbpostgresql:
     profiles:
       - db
       - dev
     image: postgres
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
-      - POSTGRES_URL=jdbc:postgresql://dbpostgresql:5432/crmdb
+      - POSTGRES_URL=jdbc:postgresql://dbpostgresql:5432/postgres

@@ -1,18 +1,18 @@
-create schema crmSchema;
-create table "user"
+create table crmuser
 (
     id    serial
         constraint user_pk
             primary key,
-    login varchar               not null,
+    username varchar               not null,
+    email varchar,
     admin boolean default false not null
 );
 
-alter table "user"
+alter table crmuser
     owner to postgres;
 
 create unique index user_login_uindex
-    on "user" (login);
+    on crmuser (username);
 
 create table customer
 (
@@ -21,6 +21,7 @@ create table customer
             primary key,
     name    varchar not null,
     surname varchar,
+    email   varchar,
     photo   bytea
 );
 

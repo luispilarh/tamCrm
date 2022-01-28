@@ -1,3 +1,5 @@
 spring:
   datasource:
-    url: jdbc:postgresql://dbpostgresql:5432/crmdb
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: password
