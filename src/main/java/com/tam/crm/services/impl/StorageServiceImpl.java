@@ -43,7 +43,10 @@ public class StorageServiceImpl implements StorageService {
 	public S3Object getObject(String name) {
 		return s3.getObject(bucket, name);
 	}
-
+	@Override
+	public boolean exitsObject(String name) {
+		return s3.doesObjectExist(bucket, name);
+	}
 	@Override
 	public String putObject(Long id, String name, String contentType, Long contentLength, InputStream is) {
 

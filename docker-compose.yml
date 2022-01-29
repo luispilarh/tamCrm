@@ -19,6 +19,8 @@ services:
       - MINIO_ROOT_PASSWORD
       - MINIO_SITE_REGION
       - MINIO_BUCKET
+      - CLIENT_ID
+      - CLIENT_SECRET
   dbpostgresql:
     profiles:
       - dev

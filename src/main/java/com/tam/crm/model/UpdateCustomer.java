@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class UpdateCustomer {
-	String  name;
+	String name;
 	String surname;
 	String email;
 }

@@ -4,12 +4,15 @@ import com.tam.crm.daos.CustomerDao;
 import com.tam.crm.model.Customer;
 import com.tam.crm.model.UpdateCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -21,45 +24,72 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public List<Customer> selectCustomers() {
-		return jdbcTemplate.query("select * from customer", BeanPropertyRowMapper.newInstance(Customer.class));
+		return jdbcTemplate.query("select * from customer where deleted=false", BeanPropertyRowMapper.newInstance(Customer.class));
 	}
 
 	@Override
 	public Customer findCustomerById(Long id) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource().addValue("id", id);
-		return namedParameterJdbcTemplate.queryForObject("select * from customer where id=:id", parameters,
+		return namedParameterJdbcTemplate.queryForObject("select customer.*,username as lasUpdatedBy from customer "
+				+ " join crmuser on crmuser.id=customer.userId"
+				+ " where customer.id=:id and customer.deleted=false", parameters,
 			BeanPropertyRowMapper.newInstance(Customer.class));
 	}
 
-	@Override public void updateCustomer(Long id, UpdateCustomer customer, Long userId) {
+	@Override public int updateCustomer(Long id, UpdateCustomer customer, Long userId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
 			.addValue("id", id)
 			.addValue("name", customer.getName())
 			.addValue("userId", userId)
 			.addValue("surname", customer.getSurname())
 			.addValue("email", customer.getEmail());
-		namedParameterJdbcTemplate.update("update customer set name=:name,surname=:surname,email=:email where id=:id", parameters);
+		return namedParameterJdbcTemplate.update("update customer set name=:name,surname=:surname,email=:email,userId=:userId  where id=:id and deleted=false", parameters);
 
 	}
 
-	@Override public void deleteCustomer(Long id, Long userId) {
+	@Override public int deleteCustomer(Long id, Long userId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
-			.addValue("id", id);
-		namedParameterJdbcTemplate.update("delete from customer where id=:id", parameters);
+			.addValue("id", id)
+			.addValue("userId", userId);
+		return namedParameterJdbcTemplate.update("update customer set deleted=true,userId=:userId where id=:id and deleted=false", parameters);
 	}
 
 	@Override
-	public void updatePhoto(Long id, String photo, Long userId) {
+	public int updatePhoto(Long id, String photo, Long userId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
 			.addValue("id", id)
 			.addValue("userId", userId)
 			.addValue("photo", photo);
-		namedParameterJdbcTemplate.update("update customer set photo=:photo,userId=:userId where id=:id", parameters);
+		return namedParameterJdbcTemplate.update("update customer set photo=:photo,userId=:userId where id=:id and deleted=false", parameters);
 	}
 
 	@Override
-	public String selectPhotoCustomer(Long id) {
-		MapSqlParameterSource parameters = new MapSqlParameterSource().addValue("id", id);
-		return namedParameterJdbcTemplate.queryForObject("select photo from customer where id=:id", parameters, String.class);
+	public int[] insertBatch(List<Customer> toInsert, Long userId) {
+
+		String sql = "INSERT INTO public.customer ( name, surname, email, photo, userid) "
+			+ "VALUES ( ?, ?, ?, ?, ? );\n";
+		return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+			@Override public void setValues(PreparedStatement ps, int i) throws SQLException {
+				Customer customer = toInsert.get(i);
+				ps.setString(1, customer.getName());
+				ps.setString(2, customer.getSurname());
+				ps.setString(3, customer.getEmail());
+				ps.setString(4, customer.getPhoto());
+			}
+
+			@Override public int getBatchSize() {
+				return toInsert.size();
+			}
+		});
 	}
+
+	@Override
+	public boolean existCustomer(String name, String surname) {
+
+		MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+			.addValue("name", name)
+			.addValue("surname", surname);
+		return namedParameterJdbcTemplate.queryForObject("select exists( select id from customer where name=:name and surname=:surname)", parameterSource, Boolean.class);
+	}
+
 }

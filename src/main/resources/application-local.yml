@@ -1,16 +1,23 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: password
+    username: ${env.POSTGRES_USER}
+    password: ${env.POSTGRES_PASSWORD}
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: ${env.CLIENT_ID}
+            clientSecret: ${env.CLIENT_SECRET}
 minio:
   url: http://localhost:9000
-  bucket: images
-  access-key: user
-  secret-key: password
-  region: us-west-0
+  bucket: ${env.MINIO_BUCKET}
+  access-key: ${env.MINIO_ROOT_USER}
+  secret-key: ${env.MINIO_ROOT_PASSWORD}
+  region: ${env.MINIO_SITE_REGION}
 security:
   enable: false
-#logging:
-#  level:
-#    root: debug
+email:
+  baseUrl: https://api.mailgun.net/v3/${env.DOMAIN_NAME}/messages
+  apiKey: ${env.API_KEY}

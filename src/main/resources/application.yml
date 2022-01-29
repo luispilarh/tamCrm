@@ -24,10 +24,18 @@ admin:
 auth:
   paths: /v1
 minio:
-  url: http://minio:9000
+  url: ${MINIO_URL}
   bucket: ${MINIO_BUCKET}
   access-key: ${MINIO_ROOT_USER}
   secret-key: ${MINIO_ROOT_PASSWORD}
   region: ${MINIO_SITE_REGION}
 security:
   enable: true
+email:
+  baseUrl: https://api.mailgun.net/v3/${DOMAIN_NAME}/messages
+  from: noreply@tam.com
+  apiKey: ${API_KEY}
+csv:
+  separator: ','
+  quote: '"'
+  header: photo, name, surname, email

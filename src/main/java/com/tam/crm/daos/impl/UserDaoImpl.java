@@ -19,7 +19,7 @@ public class UserDaoImpl implements UserDao {
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	@Override public List<User> getUsers() {
-		return jdbcTemplate.query("SELECT *  FROM crmuser", BeanPropertyRowMapper.newInstance(User.class));
+		return jdbcTemplate.query("SELECT *  FROM crmuser where deleted = false", BeanPropertyRowMapper.newInstance(User.class));
 	}
 
 	@Override public Long createUser(NewUser user) {
@@ -42,7 +42,7 @@ public class UserDaoImpl implements UserDao {
 	@Override public void deleteUser(Long id) {
 
 		MapSqlParameterSource paramSource = new MapSqlParameterSource().addValue("id",id);
-		namedParameterJdbcTemplate.update("delete from crmuser where id=:id", paramSource);
+		namedParameterJdbcTemplate.update("update crmuser set deleted=true where id=:id", paramSource);
 
 	}
 
@@ -55,11 +55,11 @@ public class UserDaoImpl implements UserDao {
 
 	@Override public User getUser(Long id) {
 		MapSqlParameterSource paramSource = new MapSqlParameterSource().addValue("id",id);
-		return namedParameterJdbcTemplate.queryForObject("select * from crmuser where id=:id", paramSource, BeanPropertyRowMapper.newInstance(User.class));
+		return namedParameterJdbcTemplate.queryForObject("select * from crmuser where id=:id and deleted=false", paramSource, BeanPropertyRowMapper.newInstance(User.class));
 	}
 
 	@Override public User getUserByLogin(String username) {
 		MapSqlParameterSource paramSource = new MapSqlParameterSource().addValue("username",username);
-		return namedParameterJdbcTemplate.queryForObject("select * from crmuser where username=:username", paramSource, BeanPropertyRowMapper.newInstance(User.class));
+		return namedParameterJdbcTemplate.queryForObject("select * from crmuser where username=:username and deleted=false", paramSource, BeanPropertyRowMapper.newInstance(User.class));
 	}
 }

@@ -10,11 +10,13 @@ public interface CustomerDao {
 
 	Customer findCustomerById(Long id);
 
-	void updateCustomer(Long id, UpdateCustomer customer, Long userId);
+	int updateCustomer(Long id, UpdateCustomer customer, Long userId);
 
-	void deleteCustomer(Long id, Long userId);
+	int deleteCustomer(Long id, Long userId);
 
-	void updatePhoto(Long id, String photo, Long userId);
+	int updatePhoto(Long id, String photo, Long userId);
 
-	String selectPhotoCustomer(Long id);
+	int[] insertBatch(List<Customer> toInsert, Long userId);
+
+	boolean existCustomer(String name, String surname);
 }
