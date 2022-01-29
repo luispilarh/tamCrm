@@ -23,6 +23,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
+//	implementation 'io.minio:minio:8.3.5'
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.12.149'
+
 	implementation "io.springfox:springfox-boot-starter:3.0.0"
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

@@ -3,3 +3,14 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: password
+minio:
+  url: http://localhost:9000
+  bucket: images
+  access-key: user
+  secret-key: password
+  region: us-west-0
+security:
+  enable: false
+#logging:
+#  level:
+#    root: debug

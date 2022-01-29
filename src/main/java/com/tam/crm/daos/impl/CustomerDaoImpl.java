@@ -31,32 +31,35 @@ public class CustomerDaoImpl implements CustomerDao {
 			BeanPropertyRowMapper.newInstance(Customer.class));
 	}
 
-	@Override public void updateCustomer(Long id, UpdateCustomer customer) {
+	@Override public void updateCustomer(Long id, UpdateCustomer customer, Long userId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
 			.addValue("id", id)
 			.addValue("name", customer.getName())
+			.addValue("userId", userId)
 			.addValue("surname", customer.getSurname())
 			.addValue("email", customer.getEmail());
 		namedParameterJdbcTemplate.update("update customer set name=:name,surname=:surname,email=:email where id=:id", parameters);
 
 	}
 
-	@Override public void deleteCustomer(Long id) {
+	@Override public void deleteCustomer(Long id, Long userId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
 			.addValue("id", id);
 		namedParameterJdbcTemplate.update("delete from customer where id=:id", parameters);
 	}
 
 	@Override
-	public void updatePhoto(Long id, byte[] bytes) {
+	public void updatePhoto(Long id, String photo, Long userId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
 			.addValue("id", id)
-			.addValue("photo", bytes);
-		namedParameterJdbcTemplate.update("update customer set photo=:photo customer where id=:id", parameters);
+			.addValue("userId", userId)
+			.addValue("photo", photo);
+		namedParameterJdbcTemplate.update("update customer set photo=:photo,userId=:userId where id=:id", parameters);
 	}
 
-	@Override public byte[] selectPhotoCustomer(Long id) {
+	@Override
+	public String selectPhotoCustomer(Long id) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource().addValue("id", id);
-		return namedParameterJdbcTemplate.queryForObject("select photo from customer where id=:id", parameters, byte[].class);
+		return namedParameterJdbcTemplate.queryForObject("select photo from customer where id=:id", parameters, String.class);
 	}
 }

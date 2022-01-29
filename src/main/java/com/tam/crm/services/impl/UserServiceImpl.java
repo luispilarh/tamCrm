@@ -6,12 +6,13 @@ import com.tam.crm.exception.UnregisteredUserException;
 import com.tam.crm.model.NewUser;
 import com.tam.crm.model.UpdateUser;
 import com.tam.crm.model.User;
-import com.tam.crm.services.AdminService;
+import com.tam.crm.services.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class AdminServiceImpl implements AdminService {
+public class UserServiceImpl implements UserService {
 	private static final String CACHE_USERS = "users";
 	@Autowired
 	private UserDao dao;
@@ -41,7 +42,7 @@ public class AdminServiceImpl implements AdminService {
 			BeanUtils.copyProperties(user, ret);
 			ret.setId(id);
 			return ret;
-		} catch (DataIntegrityViolationException e) {
+		} catch (DataAccessException e) {
 			throw new CrmDataException("User creation failed. " + e.getMessage());
 		}
 	}
@@ -64,7 +65,7 @@ public class AdminServiceImpl implements AdminService {
 			Cache cache = cacheManager.getCache(CACHE_USERS);
 			if (cache != null)
 				cache.evictIfPresent(user.getUsername());
-		} catch (DataRetrievalFailureException e) {
+		} catch (DataAccessException e) {
 			throw new CrmDataException("User not found");
 		}
 
@@ -91,12 +92,4 @@ public class AdminServiceImpl implements AdminService {
 		}
 	}
 
-	@Override
-	public Map<String, Cache> getCache() {
-		Map<String, Cache> ret = new HashMap<>();
-		for (String name : cacheManager.getCacheNames()) {
-			ret.put(name, cacheManager.getCache(name));
-		}
-		return ret;
-	}
 }

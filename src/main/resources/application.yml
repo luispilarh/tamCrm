@@ -20,6 +20,14 @@ spring:
             clientId: 14d5ce5254da72488513
             clientSecret: 3ca901216bfbcc29513ba5b7c90d3726dcb59892
 admin:
-  paths: /v1/users,/v1/util
+  paths: /v1/users,/v1/util,/v1/storage
 auth:
   paths: /v1
+minio:
+  url: http://minio:9000
+  bucket: ${MINIO_BUCKET}
+  access-key: ${MINIO_ROOT_USER}
+  secret-key: ${MINIO_ROOT_PASSWORD}
+  region: ${MINIO_SITE_REGION}
+security:
+  enable: true

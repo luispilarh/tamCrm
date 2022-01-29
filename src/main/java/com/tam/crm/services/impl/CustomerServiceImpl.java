@@ -1,10 +1,20 @@
 package com.tam.crm.services.impl;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
+import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.S3Object;
 import com.tam.crm.daos.CustomerDao;
+import com.tam.crm.exception.CrmDataException;
+import com.tam.crm.exception.CrmStorageException;
+import com.tam.crm.exception.UnregisteredUserException;
 import com.tam.crm.model.Customer;
 import com.tam.crm.model.UpdateCustomer;
+import com.tam.crm.services.AuthService;
 import com.tam.crm.services.CustomerService;
+import com.tam.crm.services.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +25,10 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	CustomerDao dao;
+	@Autowired
+	StorageService storageService;
+	@Autowired
+	AuthService authService;
 
 	@Override
 	public List<Customer> getCustomers() {
@@ -27,31 +41,42 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public void updateCustomer(Long id, UpdateCustomer customer) {
-		dao.updateCustomer(id, customer);
-	}
-
-	@Override
-	public void deleteCustomer(Long id) {
-		dao.deleteCustomer(id);
-	}
-
-	@Override
-	public byte[] getPhotoCustomer(Long id) {
-		return dao.selectPhotoCustomer(id);
-	}
-
-	@Override
-	public void updatePhotoCustomer(Long id, MultipartFile file) {
+	public void updateCustomer(Long id, UpdateCustomer customer) throws CrmDataException {
 		try {
-			checkFile(file);
-			dao.updatePhoto(id,file.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
+			dao.updateCustomer(id, customer, authService.getCurrentUser().getId());
+		} catch (UnregisteredUserException | DataAccessException e) {
+			throw new CrmDataException("Update customer failed. " + e.getMessage());
 		}
 	}
 
-	private void checkFile(MultipartFile file) {
-
+	@Override
+	public void deleteCustomer(Long id) throws CrmDataException {
+		try {
+			dao.deleteCustomer(id, authService.getCurrentUser().getId());
+		} catch (UnregisteredUserException | DataAccessException e) {
+			throw new CrmDataException("Delete customer failed. " + e.getMessage());
+		}
 	}
+
+	@Override
+	public S3Object getPhotoCustomer(Long id) {
+		Customer customerById = dao.findCustomerById(id);
+		return storageService.getObject(customerById.getPhoto());
+	}
+
+	@Override
+	public void updatePhotoCustomer(Long id, MultipartFile file) throws CrmStorageException, CrmDataException {
+		String photo;
+		try {
+			photo = storageService.putObject(id, file.getName(), file.getContentType(), file.getSize(), file.getInputStream());
+		} catch (SdkClientException | IOException e) {
+			throw new CrmStorageException(e.getMessage());
+		}
+		try {
+			dao.updatePhoto(id, photo, authService.getCurrentUser().getId());
+		} catch (UnregisteredUserException | DataAccessException e) {
+			throw new CrmDataException(e.getMessage());
+		}
+	}
+
 }

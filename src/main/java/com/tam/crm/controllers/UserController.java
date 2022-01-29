@@ -4,7 +4,7 @@ import com.tam.crm.exception.CrmDataException;
 import com.tam.crm.model.NewUser;
 import com.tam.crm.model.UpdateUser;
 import com.tam.crm.model.User;
-import com.tam.crm.services.AdminService;
+import com.tam.crm.services.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +24,7 @@ import java.util.List;
 public class UserController {
 
 	@Autowired
-	private AdminService service;
+	private UserService service;
 
 	@GetMapping()
 	public List<User> getUsers() {

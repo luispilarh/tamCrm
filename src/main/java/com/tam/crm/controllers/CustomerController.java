@@ -1,10 +1,14 @@
 package com.tam.crm.controllers;
 
+import com.amazonaws.services.s3.model.S3Object;
 import com.tam.crm.model.Customer;
 import com.tam.crm.model.UpdateCustomer;
 import com.tam.crm.services.CustomerService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,12 +55,15 @@ public class CustomerController {
 
 	@GetMapping("{id}/photo")
 	public ResponseEntity getPhotoCustomerById(@PathVariable Long id) {
-		byte[] fileContent = service.getPhotoCustomer(id);
-		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).contentLength(fileContent.length).body(fileContent);
+		S3Object photo= service.getPhotoCustomer(id);
+		return ResponseEntity.ok()
+			.contentType(MediaType.valueOf(photo.getObjectMetadata().getContentType()))
+			.contentLength(photo.getObjectMetadata().getContentLength())
+			.body(new InputStreamResource(photo.getObjectContent()));
 	}
 
-	@PostMapping("{id}/photo")
-	public void updatePhotoCustomer(@PathVariable Long id, MultipartFile file) {
+	@PostMapping(value = "{id}/photo",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public void updatePhotoCustomer(@PathVariable Long id,@RequestParam("file") MultipartFile file) {
 		service.updatePhotoCustomer(id, file);
 	}
 }

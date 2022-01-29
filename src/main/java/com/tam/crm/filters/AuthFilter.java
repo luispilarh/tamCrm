@@ -1,10 +1,11 @@
-package com.tam.crm.Filters;
+package com.tam.crm.filters;
 
 import com.tam.crm.exception.UnregisteredUserException;
 import com.tam.crm.model.User;
 import com.tam.crm.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @Component
 @Order(1)
+@ConditionalOnProperty(prefix = "security",name="enable",havingValue = "true")
 public class AuthFilter implements Filter {
 
 	@Autowired

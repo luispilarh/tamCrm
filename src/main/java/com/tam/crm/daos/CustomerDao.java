@@ -10,11 +10,11 @@ public interface CustomerDao {
 
 	Customer findCustomerById(Long id);
 
-	void updateCustomer(Long id, UpdateCustomer customer);
+	void updateCustomer(Long id, UpdateCustomer customer, Long userId);
 
-	void deleteCustomer(Long id);
+	void deleteCustomer(Long id, Long userId);
 
-	void updatePhoto(Long id, byte[] bytes);
+	void updatePhoto(Long id, String photo, Long userId);
 
-	byte[] selectPhotoCustomer(Long id);
+	String selectPhotoCustomer(Long id);
 }

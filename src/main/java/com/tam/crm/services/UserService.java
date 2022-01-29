@@ -10,7 +10,7 @@ import org.springframework.cache.Cache;
 import java.util.List;
 import java.util.Map;
 
-public interface AdminService {
+public interface UserService {
 	List<User> getUsers();
 
 	User createUser(NewUser user) throws CrmDataException;
@@ -24,6 +24,4 @@ public interface AdminService {
 	boolean isAdmin(Long id);
 
 	User getUser(String gitHubLogin) throws UnregisteredUserException;
-
-	Map<String, Cache> getCache();
 }
