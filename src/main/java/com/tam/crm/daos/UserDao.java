@@ -20,4 +20,6 @@ public interface UserDao {
 	User getUser(Long id);
 
 	User getUserByLogin(String login);
+
+	List<String> getAdminEmails();
 }

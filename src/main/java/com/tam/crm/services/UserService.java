@@ -24,4 +24,6 @@ public interface UserService {
 	boolean isAdmin(Long id);
 
 	User getUser(String gitHubLogin) throws UnregisteredUserException;
+
+	List<String> getAdminEmails() throws CrmDataException;
 }

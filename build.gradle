@@ -19,19 +19,23 @@ repositories {
 }
 
 dependencies {
+	//spring
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-//	implementation 'io.minio:minio:8.3.5'
+	//S3
 	implementation group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.12.149'
+	//needed for s3 JAXB is unavailable. Will fallback to SDK implementation which may be less performant
+	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+	//CSV
 	implementation 'de.siegmar:fastcsv:2.1.0'
-
+	//Swagger
 	implementation "io.springfox:springfox-boot-starter:3.0.0"
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	//.evn inject to local
 	implementation 'me.paulschwarz:spring-dotenv:2.3.0'
-
+	//migration database tool
 	implementation "org.flywaydb:flyway-core:8.4.2"
 	runtimeOnly 'org.postgresql:postgresql'
 

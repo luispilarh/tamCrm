@@ -3,18 +3,16 @@ package com.tam.crm.controllers;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.tam.crm.exception.UnregisteredUserException;
-import com.tam.crm.model.CrmEmail;
 import com.tam.crm.model.User;
+import com.tam.crm.services.AuthService;
 import com.tam.crm.services.EmailService;
 import com.tam.crm.services.StorageService;
-import com.tam.crm.services.AuthService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,14 +52,6 @@ public class UtilController {
 		return authService.getCurrentUser();
 	}
 
-	@PostMapping("email")
-	public void send(@RequestParam("to")String to){
-		CrmEmail crmEmail = new CrmEmail();
-		crmEmail.setText("prueba");
-		crmEmail.setSubject("prueba");
-		emailService.send(to, crmEmail);
-	}
-
 	@GetMapping("/buckets")
 	public List<Bucket> listBuckets() {
 		return storageService.listBuckets();
@@ -72,8 +62,8 @@ public class UtilController {
 		return storageService.listObjects(name);
 	}
 
-	@GetMapping("/bucktes/{name}/{object}")
-	public void getObject(@PathVariable("name") String name, @PathVariable("object") String object, HttpServletResponse response) throws IOException {
+	@GetMapping("/bucktes/{name}/object")
+	public void getObject(@PathVariable("name") String name, @RequestParam(value = "name", required = true) String object, HttpServletResponse response) throws IOException {
 		storageService.getObject(name, object, response.getOutputStream());
 		response.addHeader("Content-disposition", "attachment;filename=" + object);
 		response.setContentType(URLConnection.guessContentTypeFromName(object));

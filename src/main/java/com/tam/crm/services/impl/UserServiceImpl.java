@@ -13,13 +13,9 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -87,8 +83,16 @@ public class UserServiceImpl implements UserService {
 	public User getUser(String login) throws UnregisteredUserException {
 		try {
 			return dao.getUserByLogin(login);
-		} catch (DataRetrievalFailureException e) {
+		} catch (DataAccessException e) {
 			throw new UnregisteredUserException("User not found");
+		}
+	}
+
+	@Override public List<String> getAdminEmails() throws CrmDataException {
+		try {
+			return dao.getAdminEmails();
+		} catch (DataAccessException e) {
+			throw new CrmDataException("Failed find emails");
 		}
 	}
 

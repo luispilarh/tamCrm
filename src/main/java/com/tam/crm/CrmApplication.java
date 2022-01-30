@@ -12,12 +12,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ServerErrorException;
+import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 @EnableCaching
+@EnableAsync
 public class CrmApplication {
 	@Value("${minio.url}")
 	private String minioURl;
@@ -51,14 +57,25 @@ public class CrmApplication {
 		}
 		return amazonS3;
 	}
+
 	@Bean
-	public WebClient emailWebClient(){
+	public WebClient emailWebClient() {
 		return WebClient.builder()
 			.baseUrl(emailBaseUrl)
-			.defaultHeaders(httpHeaders -> httpHeaders.setBasicAuth("api",apiKey))
+			.defaultHeaders(httpHeaders -> httpHeaders.setBasicAuth("api", apiKey))
 			.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			.defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+			.filter(ExchangeFilterFunction
+			.ofResponseProcessor(CrmApplication::exchangeFilterResponseProcessor))
 			.build();
+	}
+	private static Mono<ClientResponse> exchangeFilterResponseProcessor(ClientResponse response) {
+		HttpStatus status = response.statusCode();
+		if (!HttpStatus.OK.equals(status)) {
+			return response.bodyToMono(String.class)
+				.flatMap(body -> Mono.error(new ServerErrorException(body)));
+		}
+		return Mono.just(response);
 	}
 
 }

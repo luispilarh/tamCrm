@@ -65,7 +65,6 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public int[] insertBatch(List<Customer> toInsert, Long userId) {
-
 		String sql = "INSERT INTO public.customer ( name, surname, email, photo, userid) "
 			+ "VALUES ( ?, ?, ?, ?, ? );\n";
 		return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -75,6 +74,7 @@ public class CustomerDaoImpl implements CustomerDao {
 				ps.setString(2, customer.getSurname());
 				ps.setString(3, customer.getEmail());
 				ps.setString(4, customer.getPhoto());
+				ps.setLong(5, userId );
 			}
 
 			@Override public int getBatchSize() {

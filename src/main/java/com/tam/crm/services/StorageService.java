@@ -19,7 +19,11 @@ public interface StorageService {
 
 	S3Object getObject(String name);
 
+	S3Object getObject(String bucket, String name);
+
 	boolean exitsObject(String name);
 
 	String putObject(Long id, String name, String contentType, Long contentLength, InputStream is);
+
+	String putObject(String bucket, Long id, String name, String contentType, Long contentLength, InputStream is);
 }

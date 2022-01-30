@@ -62,4 +62,8 @@ public class UserDaoImpl implements UserDao {
 		MapSqlParameterSource paramSource = new MapSqlParameterSource().addValue("username",username);
 		return namedParameterJdbcTemplate.queryForObject("select * from crmuser where username=:username and deleted=false", paramSource, BeanPropertyRowMapper.newInstance(User.class));
 	}
+
+	@Override public List<String> getAdminEmails() {
+		return jdbcTemplate.queryForList("select email from crmuser where admin=true and deleted=false",String.class);
+	}
 }
