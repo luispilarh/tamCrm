@@ -17,8 +17,8 @@ spring:
       client:
         registration:
           github:
-            clientId: 14d5ce5254da72488513
-            clientSecret: 3ca901216bfbcc29513ba5b7c90d3726dcb59892
+            clientId: ${env.CLIENT_ID}
+            clientSecret: ${env.CLIENT_SECRET}
 admin:
   paths: /v1/users,/v1/util,/v1/storage
 auth:

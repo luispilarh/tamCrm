@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: ${env.POSTGRES_USER}
+    password: ${env.POSTGRES_PASSWORD}
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: ${env.CLIENT_ID}
+            clientSecret: ${env.CLIENT_SECRET}
+admin:
+  paths: /v1/users,/v1/util,/v1/storage
+auth:
+  paths: /v1
+minio:
+  url: http://localhost:9000
+  bucket: ${env.MINIO_BUCKET}
+  access-key: ${env.MINIO_ROOT_USER}
+  secret-key: ${env.MINIO_ROOT_PASSWORD}
+  region: ${env.MINIO_SITE_REGION}
+security:
+  enable: false
+email:
+  baseUrl: https://api.mailgun.net/v3/${env.DOMAIN_NAME}/messages
+  from: noreply@tam.com
+  apiKey: ${env.API_KEY}
+csv:
+  separator: ','
+  quote: '"'
+  header: photo, name, surname, email
