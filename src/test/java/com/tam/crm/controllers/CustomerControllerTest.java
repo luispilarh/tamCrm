@@ -78,7 +78,7 @@ class CustomerControllerTest {
 			.put("/v1/customers/1")
 			.content(objectMapper.writeValueAsBytes(customer))
 			.contentType(MediaType.APPLICATION_JSON);
-		mockMvc.perform(request).andExpect(status().is(500));
+		mockMvc.perform(request).andExpect(status().is(200));
 	}
 
 
