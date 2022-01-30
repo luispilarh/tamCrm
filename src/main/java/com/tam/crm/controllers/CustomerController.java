@@ -69,6 +69,6 @@ public class CustomerController {
 
 	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public List<ResultCSV> createBatch(@RequestParam("file") MultipartFile file) throws CrmDataException, CrmStorageException {
-		return service.processCSV(file);
+		return service.createCustomerBatch(file);
 	}
 }

@@ -23,5 +23,5 @@ public interface CustomerService {
 
 	void updatePhotoCustomer(Long id, MultipartFile file) throws CrmStorageException, CrmDataException;
 
-	List<ResultCSV> processCSV(MultipartFile file) throws CrmDataException;
+	List<ResultCSV> createCustomerBatch(MultipartFile file) throws CrmDataException;
 }

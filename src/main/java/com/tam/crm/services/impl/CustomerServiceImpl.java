@@ -40,14 +40,6 @@ public class CustomerServiceImpl implements CustomerService {
 	StorageService storageService;
 	@Autowired
 	AuthService authService;
-	@Value("${csv.separator}")
-	char separator;
-	@Value("${csv.quote}")
-	char quote;
-	@Value("${csv.header}")
-	String[] fields;
-	@Autowired
-	ObjectMapper objectMapper;
 	@Autowired
 	EmailService emailService;
 
@@ -107,29 +99,15 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public List<ResultCSV> processCSV(MultipartFile file) throws CrmDataException {
-		InputStreamReader inputStreamReader = null;
+	public List<ResultCSV> createCustomerBatch(MultipartFile file) throws CrmDataException {
+
 		List<ResultCSV> result = new ArrayList<>();
 		List<Customer> toInsert = new ArrayList<>();
-		Map<Integer, Long> inserted = new HashMap<>();
 		try {
 			User currentUser = authService.getCurrentUser();
+			Map<Integer, Long> inserted = new HashMap<>();
 			String key = storageService.putObject(StorageServiceImpl.BUCKET_CSV, currentUser.getId(), file.getOriginalFilename(), file.getContentType(), file.getSize(), file.getInputStream());
-			inputStreamReader = new InputStreamReader(storageService.getObject(StorageServiceImpl.BUCKET_CSV, key).getObjectContent());
-			NamedCsvReader.builder()
-				.fieldSeparator(separator)
-				.quoteCharacter('"')
-				.build(inputStreamReader)
-				.forEach(namedCsvRow -> {
-					Customer customer = extractCustomer(namedCsvRow);
-					ResultCSV resultCSV = validateCustomer(customer, namedCsvRow.getOriginalLineNumber(), inserted);
-					if (!resultCSV.getLevel().equals(ResultCSV.Level.ERROR)) {
-						toInsert.add(customer);
-						inserted.put(customer.getUniqeCode(), namedCsvRow.getOriginalLineNumber());
-					}
-					if (!resultCSV.getLevel().equals(ResultCSV.Level.INFO))
-						result.add(resultCSV);
-				});
+			process(result, toInsert, inserted, key);
 			int[] ints = dao.insertBatch(toInsert, currentUser.getId());
 			emailService.sendCSVResult(result, toInsert.size(), ints.length, currentUser, key);
 
@@ -141,41 +119,6 @@ public class CustomerServiceImpl implements CustomerService {
 		return result;
 	}
 
-	private Customer extractCustomer(NamedCsvRow namedCsvRow) {
-		Map<String, String> mapCustomer = new HashMap<>();
-		for (String name : fields) {
-			mapCustomer.put(name, namedCsvRow.getField(name));
-		}
-		return objectMapper.convertValue(mapCustomer, Customer.class);
 
-	}
-
-	private ResultCSV validateCustomer(Customer customer, long lineNumber, Map<Integer, Long> inserted) {
-		ResultCSV.Level level = ResultCSV.Level.INFO;
-		String message = "";
-		if (!StringUtils.hasText(customer.getPhoto())) {
-			level = ResultCSV.Level.WARN;
-			message = message + "Photo is requiered\n";
-		} else if (!storageService.exitsObject(customer.getPhoto())) {
-			level = ResultCSV.Level.WARN;
-			message = message + "Photo not found in s3\n";
-		}
-		if (!StringUtils.hasText(customer.getName())) {
-			level = ResultCSV.Level.ERROR;
-			message = message + "Name is requiered\n";
-		}
-		if (!StringUtils.hasText(customer.getSurname())) {
-			level = ResultCSV.Level.ERROR;
-			message = message + "Surname is requiered\n";
-		}
-		if (StringUtils.hasText(customer.getSurname()) && StringUtils.hasText(customer.getName()) && inserted.get(customer.getUniqeCode()) != null) {
-			level = ResultCSV.Level.ERROR;
-			message = message + "Customer duplicated in line " + inserted.get(customer.getUniqeCode()) + "\n";
-		} else if (StringUtils.hasText(customer.getSurname()) && StringUtils.hasText(customer.getName()) && dao.existCustomer(customer.getName(), customer.getSurname())) {
-			level = ResultCSV.Level.ERROR;
-			message = message + "Customer duplicated in bbdd\n";
-		}
-		return new ResultCSV(lineNumber, level, message);
-	}
 
 }
