@@ -1,0 +1,42 @@
+<head>
+    <style>
+        .FAILED{
+            color:red;
+            font-weight:bold;
+        }
+        .SUCCESSFUL{
+            color:green;
+            font-weight:bold;
+        }
+        .ERROR{
+            color:red;
+        }
+        .WARN{
+            color:coral;
+        }
+        .none{
+            display:none;
+        }
+    </style>
+</head>
+<body>
+    <h3> User {{user}} upload <a href="{{csv}}">this csv</a> to create new customers.
+    <span class="{{status}}">{{status}}</span></h3>
+<table class="{{showTable}}">
+    <tr>
+        <th>Line</th>
+        <th>Level</th>
+        <th>Error message</th>
+    </tr>
+    {{#results}}
+    <tr class="{{level}}">
+        <td>{{line}}</td>
+        <td>{{level}}</td>
+        <td>{{message}}</td>
+    </tr>
+    {{/results}}
+</table>
+    <p><span style="color:red;font-weight: bold;">ERROR</span> lines not inserted</p>
+    <p><span style="color:coral;font-weight: bold;">WARN</span> lines inserted</p>
+    <p>In summary {{inserted}} customers created</p>
+</body>

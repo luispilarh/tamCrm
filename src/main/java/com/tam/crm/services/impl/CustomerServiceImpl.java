@@ -12,6 +12,7 @@ import com.tam.crm.model.ResultCSV;
 import com.tam.crm.model.UpdateCustomer;
 import com.tam.crm.model.User;
 import com.tam.crm.services.AuthService;
+import com.tam.crm.services.CsvService;
 import com.tam.crm.services.CustomerService;
 import com.tam.crm.services.EmailService;
 import com.tam.crm.services.StorageService;
@@ -42,6 +43,9 @@ public class CustomerServiceImpl implements CustomerService {
 	AuthService authService;
 	@Autowired
 	EmailService emailService;
+	@Autowired
+	CsvService csvService;
+
 
 	@Override
 	public List<Customer> getCustomers() {
@@ -107,7 +111,7 @@ public class CustomerServiceImpl implements CustomerService {
 			User currentUser = authService.getCurrentUser();
 			Map<Integer, Long> inserted = new HashMap<>();
 			String key = storageService.putObject(StorageServiceImpl.BUCKET_CSV, currentUser.getId(), file.getOriginalFilename(), file.getContentType(), file.getSize(), file.getInputStream());
-			process(result, toInsert, inserted, key);
+			csvService.process(result, toInsert, inserted, key);
 			int[] ints = dao.insertBatch(toInsert, currentUser.getId());
 			emailService.sendCSVResult(result, toInsert.size(), ints.length, currentUser, key);
 

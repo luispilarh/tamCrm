@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.3'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.6.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
 }
 
 group = 'com.tam'
@@ -9,44 +9,45 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	//spring
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    //spring
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
-	//S3
-	implementation group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.12.149'
-	//needed for s3 JAXB is unavailable. Will fallback to SDK implementation which may be less performant
-	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
-	//CSV
-	implementation 'de.siegmar:fastcsv:2.1.0'
-	//Swagger
-	implementation "io.springfox:springfox-boot-starter:3.0.0"
-	//.evn inject to local
-	implementation 'me.paulschwarz:spring-dotenv:2.3.0'
-	//migration database tool
-	implementation "org.flywaydb:flyway-core:8.4.2"
-	runtimeOnly 'org.postgresql:postgresql'
-
-
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    //S3
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.12.149'
+    //needed for s3 JAXB is unavailable. Will fallback to SDK implementation which may be less performant
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+    //CSV
+    implementation 'de.siegmar:fastcsv:2.1.0'
+    //Swagger
+    implementation "io.springfox:springfox-boot-starter:3.0.0"
+    //.evn inject to local
+    implementation 'me.paulschwarz:spring-dotenv:2.3.0'
+    //migration database tool
+    implementation "org.flywaydb:flyway-core:8.4.2"
+    runtimeOnly 'org.postgresql:postgresql'
+    //tempaltes
+    implementation group: 'com.github.spullara.mustache.java', name: 'compiler', version: '0.9.10'
 
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

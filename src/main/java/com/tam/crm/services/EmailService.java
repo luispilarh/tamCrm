@@ -1,5 +1,6 @@
 package com.tam.crm.services;
 
+import com.github.mustachejava.Mustache;
 import com.tam.crm.exception.CrmDataException;
 import com.tam.crm.model.ResultCSV;
 import com.tam.crm.model.User;
@@ -10,5 +11,5 @@ public interface EmailService {
 
 	void sendCSVResult(List<ResultCSV> result, int size, int length, User currentUser, String key) throws CrmDataException;
 
-	String createBody(List<ResultCSV> result, int toInsert, int inserted, User currentUser, String key);
+	String createBody(List<ResultCSV> result, int toInsert, int inserted, User currentUser, String key, Mustache template);
 }

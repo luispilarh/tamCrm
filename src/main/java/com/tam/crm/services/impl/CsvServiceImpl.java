@@ -1,6 +1,7 @@
 package com.tam.crm.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tam.crm.daos.CustomerDao;
 import com.tam.crm.model.Customer;
 import com.tam.crm.model.ResultCSV;
 import com.tam.crm.services.CsvService;
@@ -31,9 +32,11 @@ public class CsvServiceImpl implements CsvService {
 	@Autowired
 	ObjectMapper objectMapper;
 
-	private void process(List<ResultCSV> result, List<Customer> toInsert, Map<Integer, Long> inserted, String key) {
-		InputStreamReader inputStreamReader;
-		inputStreamReader = new InputStreamReader(storageService.getObject(StorageServiceImpl.BUCKET_CSV, key).getObjectContent());
+	@Autowired CustomerDao customerDao;
+
+	@Override
+	public void process(List<ResultCSV> result, List<Customer> toInsert, Map<Integer, Long> inserted, String key) {
+		InputStreamReader inputStreamReader = new InputStreamReader(storageService.getObject(StorageServiceImpl.BUCKET_CSV, key).getObjectContent());
 		NamedCsvReader.builder()
 			.fieldSeparator(separator)
 			.quoteCharacter('"')
@@ -64,25 +67,25 @@ public class CsvServiceImpl implements CsvService {
 		String message = "";
 		if (!StringUtils.hasText(customer.getPhoto())) {
 			level = ResultCSV.Level.WARN;
-			message = message + "Photo is requiered\n";
+			message = message + "Photo is requiered || ";
 		} else if (!storageService.exitsObject(customer.getPhoto())) {
 			level = ResultCSV.Level.WARN;
-			message = message + "Photo not found in s3\n";
+			message = message + "Photo not found in s3 || ";
 		}
 		if (!StringUtils.hasText(customer.getName())) {
 			level = ResultCSV.Level.ERROR;
-			message = message + "Name is requiered\n";
+			message = message + "Name is requiered || ";
 		}
 		if (!StringUtils.hasText(customer.getSurname())) {
 			level = ResultCSV.Level.ERROR;
-			message = message + "Surname is requiered\n";
+			message = message + "Surname is requiered || ";
 		}
 		if (StringUtils.hasText(customer.getSurname()) && StringUtils.hasText(customer.getName()) && inserted.get(customer.getUniqeCode()) != null) {
 			level = ResultCSV.Level.ERROR;
-			message = message + "Customer duplicated in line " + inserted.get(customer.getUniqeCode()) + "\n";
-		} else if (StringUtils.hasText(customer.getSurname()) && StringUtils.hasText(customer.getName()) && dao.existCustomer(customer.getName(), customer.getSurname())) {
+			message = message + "Customer duplicated in line " + inserted.get(customer.getUniqeCode()) + " || ";
+		} else if (StringUtils.hasText(customer.getSurname()) && StringUtils.hasText(customer.getName()) && customerDao.existCustomer(customer.getName(), customer.getSurname())) {
 			level = ResultCSV.Level.ERROR;
-			message = message + "Customer duplicated in bbdd\n";
+			message = message + "Customer duplicated in bbdd || ";
 		}
 		return new ResultCSV(lineNumber, level, message);
 	}
