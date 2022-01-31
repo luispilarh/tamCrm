@@ -10,7 +10,7 @@
 - [docker-compose](https://docs.docker.com/compose/install/)
 ## Quick start
 
-For to test it, you have to follow simple steps:
+To test it, you have to follow simple steps:
 - Check out the project
   
        git clone https://github.com/luispih/tamCrm.git
