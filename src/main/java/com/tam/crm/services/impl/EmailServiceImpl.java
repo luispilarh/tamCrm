@@ -75,11 +75,7 @@ public class EmailServiceImpl implements EmailService {
 					map.add("html", body);
 					map.add("subject", subject);
 					HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-					try {
-						log.info(restTemplate.postForEntity(urlTemplate, request, Map.class).getBody());
-					} catch (HttpClientErrorException e) {
-						log.error("email not send", e);
-					}
+					postRequest(urlTemplate, request);
 				}
 			} else {
 				log.error("Email not send, not found admin emails");
@@ -88,6 +84,14 @@ public class EmailServiceImpl implements EmailService {
 			log.error("Email not send, not found template");
 		}
 
+	}
+
+	private void postRequest(String urlTemplate, HttpEntity<MultiValueMap<String, String>> request) {
+		try {
+			log.info(restTemplate.postForEntity(urlTemplate, request, Map.class).getBody());
+		} catch (HttpClientErrorException e) {
+			log.error("email not send", e);
+		}
 	}
 
 	@Override

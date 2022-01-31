@@ -2,10 +2,9 @@ package com.tam.crm.services.impl;
 
 import com.tam.crm.exception.UnregisteredUserException;
 import com.tam.crm.model.User;
-import com.tam.crm.services.UserService;
 import com.tam.crm.services.AuthService;
+import com.tam.crm.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;

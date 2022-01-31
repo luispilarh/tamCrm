@@ -17,6 +17,12 @@ import java.util.List;
 
 @Repository
 public class CustomerDaoImpl implements CustomerDao {
+	private static final String ID = "id";
+	private static final String NAME = "name";
+	private static final String USER_ID = "userId";
+	private static final String SURNAME = "surname";
+	private static final String EMAIL = "email";
+	private static final String PHOTO = "photo";
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	@Autowired
@@ -29,7 +35,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public Customer findCustomerById(Long id) {
-		MapSqlParameterSource parameters = new MapSqlParameterSource().addValue("id", id);
+		MapSqlParameterSource parameters = new MapSqlParameterSource().addValue(ID, id);
 		return namedParameterJdbcTemplate.queryForObject("select customer.*,username as lasUpdatedBy from customer "
 				+ " join crmuser on crmuser.id=customer.userId"
 				+ " where customer.id=:id and customer.deleted=false", parameters,
@@ -38,28 +44,28 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override public int updateCustomer(Long id, UpdateCustomer customer, Long userId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
-			.addValue("id", id)
-			.addValue("name", customer.getName())
-			.addValue("userId", userId)
-			.addValue("surname", customer.getSurname())
-			.addValue("email", customer.getEmail());
+			.addValue(ID, id)
+			.addValue(NAME, customer.getName())
+			.addValue(USER_ID, userId)
+			.addValue(SURNAME, customer.getSurname())
+			.addValue(EMAIL, customer.getEmail());
 		return namedParameterJdbcTemplate.update("update customer set name=:name,surname=:surname,email=:email,userId=:userId  where id=:id and deleted=false", parameters);
 
 	}
 
 	@Override public int deleteCustomer(Long id, Long userId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
-			.addValue("id", id)
-			.addValue("userId", userId);
+			.addValue(ID, id)
+			.addValue(USER_ID, userId);
 		return namedParameterJdbcTemplate.update("update customer set deleted=true,userId=:userId where id=:id and deleted=false", parameters);
 	}
 
 	@Override
 	public int updatePhoto(Long id, String photo, Long userId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
-			.addValue("id", id)
-			.addValue("userId", userId)
-			.addValue("photo", photo);
+			.addValue(ID, id)
+			.addValue(USER_ID, userId)
+			.addValue(PHOTO, photo);
 		return namedParameterJdbcTemplate.update("update customer set photo=:photo,userId=:userId where id=:id and deleted=false", parameters);
 	}
 
@@ -87,8 +93,8 @@ public class CustomerDaoImpl implements CustomerDao {
 	public boolean existCustomer(String name, String surname) {
 
 		MapSqlParameterSource parameterSource = new MapSqlParameterSource()
-			.addValue("name", name)
-			.addValue("surname", surname);
+			.addValue(NAME, name)
+			.addValue(SURNAME, surname);
 		return namedParameterJdbcTemplate.queryForObject("select exists( select id from customer where name=:name and surname=:surname)", parameterSource, Boolean.class);
 	}
 

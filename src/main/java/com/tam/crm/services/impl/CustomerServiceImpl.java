@@ -38,7 +38,6 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private CsvService csvService;
 
-
 	@Override
 	public List<Customer> getCustomers() {
 		return dao.selectCustomers();
@@ -53,10 +52,10 @@ public class CustomerServiceImpl implements CustomerService {
 	public void updateCustomer(Long id, UpdateCustomer customer) throws CrmDataException {
 		try {
 			if (dao.updateCustomer(id, customer, authService.getCurrentUser().getId()) != 1) {
-				throw new CrmDataException("fail to update customer");
+				throw new CrmDataException("fail to update customer", null);
 			}
 		} catch (UnregisteredUserException | DataAccessException e) {
-			throw new CrmDataException("Update customer failed. " + e.getMessage());
+			throw new CrmDataException("Update customer failed.", e);
 		}
 	}
 
@@ -64,10 +63,10 @@ public class CustomerServiceImpl implements CustomerService {
 	public void deleteCustomer(Long id) throws CrmDataException {
 		try {
 			if (dao.deleteCustomer(id, authService.getCurrentUser().getId()) != 1) {
-				throw new CrmDataException("fail to delete customer");
+				throw new CrmDataException("fail to delete customer", null);
 			}
 		} catch (UnregisteredUserException | DataAccessException e) {
-			throw new CrmDataException("Delete customer failed. " + e.getMessage());
+			throw new CrmDataException("Delete customer failed. ", e);
 		}
 	}
 
@@ -87,10 +86,10 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 		try {
 			if (dao.updatePhoto(id, photo, authService.getCurrentUser().getId()) != 1) {
-				throw new CrmDataException("fail to update customer");
+				throw new CrmDataException("fail to update customer", null);
 			}
 		} catch (UnregisteredUserException | DataAccessException e) {
-			throw new CrmDataException(e.getMessage());
+			throw new CrmDataException("fail to update customer",e);
 		}
 	}
 
@@ -107,13 +106,11 @@ public class CustomerServiceImpl implements CustomerService {
 			emailService.sendCSVResult(result, toInsert.size(), ints.length, currentUser, key);
 
 		} catch (UnregisteredUserException e) {
-			throw new CrmDataException("fail to create customers, user not found.");
-		} catch (IOException | DataAccessException |SdkClientException e) {
-			throw new CrmDataException("fail to create customers");
+			throw new CrmDataException("fail to create customers, user not found.",e);
+		} catch (IOException | DataAccessException | SdkClientException e) {
+			throw new CrmDataException("fail to create customers",e);
 		}
 		return result;
 	}
-
-
 
 }

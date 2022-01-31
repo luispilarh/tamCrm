@@ -27,7 +27,7 @@ import java.util.List;
 public class AuthFilter implements Filter {
 
 	@Autowired
-	private AuthService authService;
+	protected AuthService authService;
 
 	@Value("${auth.paths}")
 	String authPaths;
@@ -51,7 +51,6 @@ public class AuthFilter implements Filter {
 				chain.doFilter(request, response);
 			} catch (UnregisteredUserException e) {
 				resp.sendError(HttpStatus.UNAUTHORIZED.value(), "Current user unauthorized");
-				return;
 			}
 		} else {
 			chain.doFilter(request, response);
