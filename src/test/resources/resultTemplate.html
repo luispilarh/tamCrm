@@ -1,0 +1,45 @@
+<head>
+    <style>
+        .FAILED{
+            color:red;
+            font-weight:bold;
+        }
+        .SUCCESSFUL{
+            color:green;
+            font-weight:bold;
+        }
+        .ERROR{
+            color:red;
+        }
+        .WARN{
+            color:coral;
+        }
+        .none{
+            display:none;
+        }
+    </style>
+</head>
+<body>
+    <h3> User  upload <a href="null/v1/util/bucktes/csv/object?key&#61;key">this csv</a> to create new customers.
+    <span class="FAILED">FAILED</span></h3>
+<table class="">
+    <tr>
+        <th>Line</th>
+        <th>Level</th>
+        <th>Error message</th>
+    </tr>
+    <tr class="WARN">
+        <td>1</td>
+        <td>WARN</td>
+        <td>test</td>
+    </tr>
+    <tr class="WARN">
+        <td>2</td>
+        <td>WARN</td>
+        <td>test2</td>
+    </tr>
+</table>
+    <p><span style="color:red;font-weight: bold;">ERROR</span> lines not inserted</p>
+    <p><span style="color:coral;font-weight: bold;">WARN</span> lines inserted</p>
+    <p>In summary 10 customers created</p>
+</body>

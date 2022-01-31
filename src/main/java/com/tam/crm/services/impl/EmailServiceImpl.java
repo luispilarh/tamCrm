@@ -39,15 +39,17 @@ public class EmailServiceImpl implements EmailService {
 	String from;
 	@Value("${crm.urlBase:http://localhost:8080}")
 	String urlBase;
-	@Autowired
-	private UserService userService;
 	@Value("${email.baseUrl}")
-	private String emailBaseUrl;
+	protected String emailBaseUrl;
 	@Value("${email.apiKey}")
-	private String apiKey;
-
+	protected String apiKey;
 	@Value("classpath:template.html")
 	Resource template;
+
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private RestTemplate restTemplate;
 
 	private Log log = LogFactory.getLog(EmailServiceImpl.class);
 
@@ -57,12 +59,11 @@ public class EmailServiceImpl implements EmailService {
 		try {
 			if (!toList.isEmpty()) {
 				String body = null;
-				body = createBody(result, toInsert, inserted, currentUser, key, getTemplate());
+				body = createBody(result, toInsert, inserted, currentUser, key);
 
 				String subject = "Proccess CSV " + (result.isEmpty() && toInsert == inserted ? "SUCCESSFUL" : "FAILED");
 				for (String to : toList) {
 					//TODO implement queue politics
-					RestTemplate restTemplate = new RestTemplate();
 					HttpHeaders headers = new HttpHeaders();
 					headers.setBasicAuth("api", apiKey);
 					String urlTemplate = UriComponentsBuilder
@@ -90,7 +91,7 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
-	public String createBody(List<ResultCSV> result, int toInsert, int inserted, User currentUser, String key, Mustache template) {
+	public String createBody(List<ResultCSV> result, int toInsert, int inserted, User currentUser, String key) throws IOException {
 		boolean insertError = toInsert != inserted;
 		Writer writer = new StringWriter();
 		HashMap<String, Object> map = new HashMap<>();
@@ -100,7 +101,7 @@ public class EmailServiceImpl implements EmailService {
 		map.put("results", result);
 		map.put("inserted", inserted);
 		map.put("showTable", result.isEmpty()?"none":"");
-		template.execute(writer, map);
+		getTemplate().execute(writer, map);
 
 		return writer.toString();
 	}
