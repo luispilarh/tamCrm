@@ -6,8 +6,8 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=luispih_tamCrm&metric=coverage)](https://sonarcloud.io/summary/new_code?id=luispih_tamCrm)
 
 ## Prerequisites
-- docker(https://docs.docker.com/engine/install/) 
-- docker-compose(https://docs.docker.com/compose/install/)
+- [docker](https://docs.docker.com/engine/install/) 
+- [docker-compose](https://docs.docker.com/compose/install/)
 ## Quick start
 
 For to test it, you have to follow simple steps:
