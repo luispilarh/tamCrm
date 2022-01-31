@@ -17,7 +17,7 @@ minio:
   secret-key: ${env.MINIO_ROOT_PASSWORD}
   region: ${env.MINIO_SITE_REGION}
 security:
-  enable: false
+  enable: true
 email:
   baseUrl: https://api.mailgun.net/v3/${env.DOMAIN_NAME}/messages
   apiKey: ${env.API_KEY}

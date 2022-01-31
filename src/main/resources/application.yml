@@ -20,7 +20,7 @@ spring:
             clientId: ${env.CLIENT_ID}
             clientSecret: ${env.CLIENT_SECRET}
 admin:
-  paths: /v1/users,/v1/util,/v1/storage
+  paths: /v1/users,/v1/util
 auth:
   paths: /v1
 minio:

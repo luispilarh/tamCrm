@@ -15,13 +15,10 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 	@Autowired
 	UserService userService;
-	@Value("${security.enable}")
-	boolean securityEnable;
 
 	@Override
 	public User getCurrentUser() throws UnregisteredUserException {
-		if (!securityEnable)
-			return userService.getUser("luispih");
+
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		DefaultOAuth2User principal = (DefaultOAuth2User) authentication.getPrincipal();
 		String login = principal.getAttribute("login");
