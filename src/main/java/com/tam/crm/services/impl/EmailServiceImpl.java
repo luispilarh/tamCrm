@@ -40,7 +40,7 @@ public class EmailServiceImpl implements EmailService {
 	@Value("${crm.urlBase:http://localhost:8080}")
 	String urlBase;
 	@Autowired
-	UserService userService;
+	private UserService userService;
 	@Value("${email.baseUrl}")
 	private String emailBaseUrl;
 	@Value("${email.apiKey}")

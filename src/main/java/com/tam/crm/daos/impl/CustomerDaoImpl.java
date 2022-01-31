@@ -18,9 +18,9 @@ import java.util.List;
 @Repository
 public class CustomerDaoImpl implements CustomerDao {
 	@Autowired
-	JdbcTemplate jdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
 	@Autowired
-	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	@Override
 	public List<Customer> selectCustomers() {

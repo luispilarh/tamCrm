@@ -21,7 +21,7 @@ import java.util.Map;
 @Service
 public class CsvServiceImpl implements CsvService {
 	@Autowired
-	StorageService storageService;
+	private StorageService storageService;
 
 	@Value("${csv.separator}")
 	char separator;
@@ -30,12 +30,14 @@ public class CsvServiceImpl implements CsvService {
 	@Value("${csv.header}")
 	String[] fields;
 	@Autowired
-	ObjectMapper objectMapper;
+	protected ObjectMapper objectMapper;
 
-	@Autowired CustomerDao customerDao;
+	@Autowired
+	private CustomerDao customerDao;
 
 	@Override
-	public void process(List<ResultCSV> result, List<Customer> toInsert, Map<Integer, Long> inserted, String key) {
+	public void process(List<ResultCSV> result, List<Customer> toInsert, String key) {
+		Map<Integer, Long> inserted = new HashMap<>();
 		InputStreamReader inputStreamReader = new InputStreamReader(storageService.getObject(StorageServiceImpl.BUCKET_CSV, key).getObjectContent());
 		NamedCsvReader.builder()
 			.fieldSeparator(separator)
@@ -68,7 +70,7 @@ public class CsvServiceImpl implements CsvService {
 		if (!StringUtils.hasText(customer.getPhoto())) {
 			level = ResultCSV.Level.WARN;
 			message = message + "Photo is requiered || ";
-		} else if (!storageService.exitsObject(customer.getPhoto())) {
+		} else if (!storageService.exitsImage(customer.getPhoto())) {
 			level = ResultCSV.Level.WARN;
 			message = message + "Photo not found in s3 || ";
 		}

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthServiceImpl implements AuthService {
 	@Autowired
-	UserService userService;
+	private UserService userService;
 
 	@Override
 	public User getCurrentUser() throws UnregisteredUserException {

@@ -36,15 +36,15 @@ import java.util.Map;
 public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
-	CustomerDao dao;
+	private CustomerDao dao;
 	@Autowired
-	StorageService storageService;
+	private StorageService storageService;
 	@Autowired
-	AuthService authService;
+	private AuthService authService;
 	@Autowired
-	EmailService emailService;
+	private EmailService emailService;
 	@Autowired
-	CsvService csvService;
+	private CsvService csvService;
 
 
 	@Override
@@ -109,9 +109,8 @@ public class CustomerServiceImpl implements CustomerService {
 		List<Customer> toInsert = new ArrayList<>();
 		try {
 			User currentUser = authService.getCurrentUser();
-			Map<Integer, Long> inserted = new HashMap<>();
 			String key = storageService.putObject(StorageServiceImpl.BUCKET_CSV, currentUser.getId(), file.getOriginalFilename(), file.getContentType(), file.getSize(), file.getInputStream());
-			csvService.process(result, toInsert, inserted, key);
+			csvService.process(result, toInsert, key);
 			int[] ints = dao.insertBatch(toInsert, currentUser.getId());
 			emailService.sendCSVResult(result, toInsert.size(), ints.length, currentUser, key);
 

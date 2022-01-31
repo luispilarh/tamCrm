@@ -15,9 +15,9 @@ import java.util.List;
 @Repository
 public class UserDaoImpl implements UserDao {
 	@Autowired
-	JdbcTemplate jdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
 	@Autowired
-	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	@Override public List<User> getUsers() {
 		return jdbcTemplate.query("SELECT *  FROM crmuser where deleted = false", BeanPropertyRowMapper.newInstance(User.class));
 	}

@@ -30,11 +30,11 @@ import java.util.Map;
 public class UtilController {
 
 	@Autowired
-	AuthService authService;
+	private AuthService authService;
 	@Autowired
-	CacheManager cacheManager;
+	private CacheManager cacheManager;
 	@Autowired
-	EmailService emailService;
+	private EmailService emailService;
 	@Autowired
 	private StorageService storageService;
 

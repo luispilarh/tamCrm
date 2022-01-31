@@ -27,7 +27,7 @@ import java.util.List;
 public class AuthFilter implements Filter {
 
 	@Autowired
-	AuthService authService;
+	private AuthService authService;
 
 	@Value("${auth.paths}")
 	String authPaths;

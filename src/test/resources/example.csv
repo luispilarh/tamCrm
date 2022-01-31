@@ -1,0 +1,8 @@
+"name","surname","email","photo"
+"customer1","surname1","email1","photo1"
+"customer2","surname2","email2","photo2"
+"customer2","surname2","email2",""
+"customer3",,"email2","photo2"
+,,"email2","photo2"
+,"surname4","email2","photo2"
+"customer8","surname8","email2","photo2"

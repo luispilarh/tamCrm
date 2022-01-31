@@ -50,7 +50,7 @@ public class StorageServiceImpl implements StorageService {
 		return s3.getObject(bucket, name);
 	}
 	@Override
-	public boolean exitsObject(String name) {
+	public boolean exitsImage(String name) {
 		return s3.doesObjectExist(bucket, name);
 	}
 	@Override
