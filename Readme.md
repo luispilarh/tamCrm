@@ -18,7 +18,7 @@ To test it, you have to follow simple steps:
   - Add your Github user as an admin in the user's table. You can add a new insert in file *src/main/resources/db/migration/R__createUsers.sql*
   
         INSERT INTO crmuser ( username, email, admin)   VALUES ( 'userName', 'mail', true)  ON CONFLICT DO NOTHING
-  - Configure your environment, can copy file example.env, rename .env and fill the properties
+  - Configure your environment, can copy file **example.env**, rename to **.env** and fill the properties
     
         DOMAIN_NAME=XXX.mailgun.org
         API_KEY=XXX
