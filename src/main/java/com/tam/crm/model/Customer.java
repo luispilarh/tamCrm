@@ -8,7 +8,7 @@ import lombok.ToString;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class Customer extends UpdateCustomer {
 	Long id;
 	String photo;
