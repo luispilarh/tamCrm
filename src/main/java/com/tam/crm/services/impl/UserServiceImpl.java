@@ -1,6 +1,5 @@
 package com.tam.crm.services.impl;
 
-import com.tam.crm.advices.RestExceptionHandler;
 import com.tam.crm.daos.UserDao;
 import com.tam.crm.exception.CrmDataException;
 import com.tam.crm.exception.UnregisteredUserException;
@@ -8,8 +7,6 @@ import com.tam.crm.model.NewUser;
 import com.tam.crm.model.UpdateUser;
 import com.tam.crm.model.User;
 import com.tam.crm.services.UserService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
@@ -41,9 +38,8 @@ public class UserServiceImpl implements UserService {
 			BeanUtils.copyProperties(user, ret);
 			ret.setId(id);
 			return ret;
-		}
-		catch (DataAccessException e) {
-			throw new CrmDataException("User creation failed.",e);
+		} catch (DataAccessException e) {
+			throw new CrmDataException("User creation failed.", e);
 		}
 	}
 
@@ -66,7 +62,7 @@ public class UserServiceImpl implements UserService {
 			if (cache != null)
 				cache.evictIfPresent(user.getUsername());
 		} catch (DataAccessException e) {
-			throw new CrmDataException("User not found",e);
+			throw new CrmDataException("User not found", e);
 		}
 
 	}
@@ -88,7 +84,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			return dao.getUserByLogin(login);
 		} catch (DataAccessException e) {
-			throw new UnregisteredUserException("User not found",e);
+			throw new UnregisteredUserException("User not found", e);
 		}
 	}
 
@@ -97,7 +93,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			return dao.getAdminEmails();
 		} catch (DataAccessException e) {
-			throw new CrmDataException("Failed find emails",e);
+			throw new CrmDataException("Failed find emails", e);
 		}
 	}
 

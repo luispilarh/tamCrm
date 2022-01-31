@@ -112,8 +112,8 @@ class CustomerControllerTest {
 			.get("/v1/customers/1/photo");
 		Mockito.when(customerService.getPhotoCustomer(1l)).thenReturn(photo);
 		MvcResult mvcResult = mockMvc.perform(request).andExpect(status().isOk()).andReturn();
-		Assertions.assertEquals(mvcResult.getResponse().getContentType(), MediaType.IMAGE_JPEG_VALUE);
-		Assertions.assertEquals(mvcResult.getResponse().getContentAsString(), test);
+		Assertions.assertEquals(MediaType.IMAGE_JPEG_VALUE, mvcResult.getResponse().getContentType());
+		Assertions.assertEquals(test, mvcResult.getResponse().getContentAsString());
 	}
 
 	@Test

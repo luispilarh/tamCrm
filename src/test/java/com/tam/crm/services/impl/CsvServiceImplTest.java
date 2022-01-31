@@ -55,8 +55,8 @@ class CsvServiceImplTest {
 		Mockito.when(customerDao.existCustomer("customer2","surname2")).thenReturn(false);
 		Mockito.when(storageService.getObject(StorageServiceImpl.BUCKET_CSV,key)).thenReturn(s3Object);
 		csvService.process(result, toInsert, key);
-		Assertions.assertEquals(result.size(),6);
-		Assertions.assertEquals(toInsert.size(),2);
+		Assertions.assertEquals(6,result.size());
+		Assertions.assertEquals(2,toInsert.size());
 	}
 
 

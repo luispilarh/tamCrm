@@ -31,13 +31,13 @@ class CustomerDaoImplTest {
 
 	@Test
 	void findCustomerById() {
-		Assertions.assertEquals(dao.findCustomerById(1l).getName(),"pepe");
+		Assertions.assertEquals("pepe",dao.findCustomerById(1l).getName());
 	}
 
 	@Test
 	void updateCustomer() {
 		Customer customerById = dao.findCustomerById(1l);
-		Assertions.assertNotEquals(customerById,dao.updateCustomer(1l,getUpdateCustomer(),1l));
+		Assertions.assertEquals(1,dao.updateCustomer(1l,getUpdateCustomer(),1l));
 	}
 
 	@Test

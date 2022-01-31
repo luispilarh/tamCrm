@@ -70,8 +70,8 @@ class UserDaoImplTest {
 	void getUser() {
 		User user = dao.getUser(1l);
 		Assertions.assertNotNull(user);
-		Assertions.assertEquals(user.getUsername(), "pepe");
-		Assertions.assertEquals(user.getEmail(), "mail@gmail.com");
+		Assertions.assertEquals( "pepe",user.getUsername());
+		Assertions.assertEquals("mail@gmail.com",user.getEmail());
 	}
 
 	@Test
@@ -84,6 +84,6 @@ class UserDaoImplTest {
 	void getAdminEmails() {
 		List<String> adminEmails = dao.getAdminEmails();
 		Assertions.assertNotNull(adminEmails);
-		Assertions.assertEquals(adminEmails.size(),1);
+		Assertions.assertEquals(1,adminEmails.size());
 	}
 }

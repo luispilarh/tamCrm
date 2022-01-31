@@ -5,7 +5,6 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.tam.crm.exception.UnregisteredUserException;
 import com.tam.crm.model.User;
 import com.tam.crm.services.AuthService;
-import com.tam.crm.services.EmailService;
 import com.tam.crm.services.StorageService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;

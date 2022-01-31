@@ -27,6 +27,7 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+	private static final String FAIL_TO_UPDATE_CUSTOMER = "fail to update customer";
 	@Autowired
 	private CustomerDao dao;
 	@Autowired
@@ -52,7 +53,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public void updateCustomer(Long id, UpdateCustomer customer) throws CrmDataException {
 		try {
 			if (dao.updateCustomer(id, customer, authService.getCurrentUser().getId()) != 1) {
-				throw new CrmDataException("fail to update customer", null);
+				throw new CrmDataException(FAIL_TO_UPDATE_CUSTOMER, null);
 			}
 		} catch (UnregisteredUserException | DataAccessException e) {
 			throw new CrmDataException("Update customer failed.", e);
@@ -86,10 +87,10 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 		try {
 			if (dao.updatePhoto(id, photo, authService.getCurrentUser().getId()) != 1) {
-				throw new CrmDataException("fail to update customer", null);
+				throw new CrmDataException(FAIL_TO_UPDATE_CUSTOMER, null);
 			}
 		} catch (UnregisteredUserException | DataAccessException e) {
-			throw new CrmDataException("fail to update customer",e);
+			throw new CrmDataException(FAIL_TO_UPDATE_CUSTOMER,e);
 		}
 	}
 
