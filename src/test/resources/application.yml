@@ -8,6 +8,10 @@ spring:
     driverClassName: org.h2.Driver
     schema: classpath:/schema/*.sql
     data: classpath:/data/*.sql
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   h2:
     console:
       enabled: true
