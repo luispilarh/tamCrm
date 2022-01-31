@@ -9,8 +9,6 @@ name: build
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   gradle:
@@ -32,11 +30,4 @@ jobs:
     - name: Execute Gradle build
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: build jacocoTestReport
-    - name: JaCoCo Report
-      uses: Madrapps/jacoco-report@v1.2
-      with:
-        paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
-        token: ${{ secrets.GITHUB_TOKEN }}
-        min-coverage-overall: 40
-        min-coverage-changed-files: 60
+        arguments: build
