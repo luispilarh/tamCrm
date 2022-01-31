@@ -11,8 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class CrmApplicationTests {
 	@Autowired
 	private UtilController controller;
-	@Test
-	@Disabled//failed in github actions
+	//@Test
+	//@Disabled//failed in github actions
 	void contextLoads() {
 		Assertions.assertNotNull(controller);
 	}
