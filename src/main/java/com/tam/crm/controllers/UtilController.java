@@ -34,8 +34,6 @@ public class UtilController {
 	@Autowired
 	private CacheManager cacheManager;
 	@Autowired
-	private EmailService emailService;
-	@Autowired
 	private StorageService storageService;
 
 	@GetMapping("cache")
@@ -58,7 +56,7 @@ public class UtilController {
 	}
 
 	@GetMapping("/bucktes/{name}")
-	public List<S3ObjectSummary> testMinio(@PathVariable String name) {
+	public List<S3ObjectSummary> listObjects(@PathVariable String name) {
 		return storageService.listObjects(name);
 	}
 
