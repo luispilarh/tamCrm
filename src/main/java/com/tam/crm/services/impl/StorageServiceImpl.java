@@ -26,8 +26,8 @@ public class StorageServiceImpl implements StorageService {
 	private String bucket;
 	public static final String BUCKET_CSV = "csv";
 
-	@Override public List<S3ObjectSummary> listObjects(String name) {
-		ObjectListing objectListing = s3.listObjects(name);
+	@Override public List<S3ObjectSummary> listObjects(String bucket) {
+		ObjectListing objectListing = s3.listObjects(bucket);
 		return objectListing.getObjectSummaries();
 	}
 
@@ -36,31 +36,31 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public void getObject(String name, String object, ServletOutputStream outputStream) throws IOException {
-		S3Object object1 = s3.getObject(name, object);
+	public void getObject(String bucket, String key, ServletOutputStream outputStream) throws IOException {
+		S3Object object1 = s3.getObject(bucket, key);
 		IOUtils.copy(object1.getObjectContent(), outputStream);
 	}
 
 	@Override
-	public S3Object getObject(String name) {
-		return s3.getObject(bucket, name);
+	public S3Object getImage(String key) {
+		return s3.getObject(bucket, key);
 	}
 	@Override
-	public S3Object getObject(String bucket, String name) {
-		return s3.getObject(bucket, name);
+	public S3Object getObject(String bucket, String key) {
+		return s3.getObject(bucket, key);
 	}
 	@Override
-	public boolean exitsImage(String name) {
-		return s3.doesObjectExist(bucket, name);
+	public boolean exitsImage(String key) {
+		return s3.doesObjectExist(bucket, key);
 	}
 	@Override
-	public String putObject(Long id, String name, String contentType, Long contentLength, InputStream is) {
+	public String putImage(Long id, String name, String contentType, Long contentLength, InputStream is) {
 
-		return this.putObject(bucket,id,name,contentType,contentLength,is);
+		return this.putObjet(bucket,id,name,contentType,contentLength,is);
 	}
 
 	@Override
-	public String putObject(String bucket, Long id, String name, String contentType, Long contentLength, InputStream is) {
+	public String putObjet(String bucket, Long id, String name, String contentType, Long contentLength, InputStream is) {
 		if(!s3.doesBucketExistV2(bucket)){
 			s3.createBucket(bucket);
 		}

@@ -14,15 +14,16 @@ public interface StorageService {
 
 	List<Bucket> listBuckets();
 
-	void getObject(String name, String object, ServletOutputStream outputStream) throws IOException;
+	void getObject(String bucket, String key, ServletOutputStream outputStream) throws IOException;
 
-	S3Object getObject(String name);
+	S3Object getImage(String key);
 
-	S3Object getObject(String bucket, String name);
+	S3Object getObject(String bucket, String key);
 
-	boolean exitsImage(String name);
+	boolean exitsImage(String key);
 
-	String putObject(Long id, String name, String contentType, Long contentLength, InputStream is);
+	String putImage(Long id, String name, String contentType, Long contentLength, InputStream is);
 
-	String putObject(String bucket, Long id, String name, String contentType, Long contentLength, InputStream is);
+
+	String putObjet(String bucket, Long id, String name, String contentType, Long contentLength, InputStream is);
 }

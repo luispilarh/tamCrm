@@ -95,7 +95,7 @@ public class EmailServiceImpl implements EmailService {
 		Writer writer = new StringWriter();
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("user", currentUser.getUsername());
-		map.put("csv", urlBase + "/v1/util/bucktes/" + StorageServiceImpl.BUCKET_CSV+"/object?name="+key);
+		map.put("csv", urlBase + "/v1/util/bucktes/" + StorageServiceImpl.BUCKET_CSV+"/object?key="+key);
 		map.put("status", (result.isEmpty() && !insertError) ? "SUCCESSFUL" : "FAILED");
 		map.put("results", result);
 		map.put("inserted", inserted);

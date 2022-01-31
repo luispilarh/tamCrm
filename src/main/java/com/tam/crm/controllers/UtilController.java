@@ -62,11 +62,11 @@ public class UtilController {
 		return storageService.listObjects(name);
 	}
 
-	@GetMapping("/bucktes/{name}/object")
-	public void getObject(@PathVariable("name") String name, @RequestParam(value = "name", required = true) String object, HttpServletResponse response) throws IOException {
-		storageService.getObject(name, object, response.getOutputStream());
-		response.addHeader("Content-disposition", "attachment;filename=" + object);
-		response.setContentType(URLConnection.guessContentTypeFromName(object));
+	@GetMapping("/bucktes/{bucket}/object")
+	public void getObject(@PathVariable("bucket") String bucket, @RequestParam(value = "key", required = true) String key, HttpServletResponse response) throws IOException {
+		storageService.getObject(bucket, key, response.getOutputStream());
+		response.addHeader("Content-disposition", "attachment;filename=" + key);
+		response.setContentType(URLConnection.guessContentTypeFromName(key));
 		response.flushBuffer();
 	}
 }

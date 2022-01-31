@@ -2,7 +2,6 @@ package com.tam.crm.services.impl;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.model.S3Object;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tam.crm.daos.CustomerDao;
 import com.tam.crm.exception.CrmDataException;
 import com.tam.crm.exception.CrmStorageException;
@@ -16,21 +15,14 @@ import com.tam.crm.services.CsvService;
 import com.tam.crm.services.CustomerService;
 import com.tam.crm.services.EmailService;
 import com.tam.crm.services.StorageService;
-import de.siegmar.fastcsv.reader.NamedCsvReader;
-import de.siegmar.fastcsv.reader.NamedCsvRow;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -82,14 +74,14 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public S3Object getPhotoCustomer(Long id) {
 		Customer customerById = dao.findCustomerById(id);
-		return storageService.getObject(customerById.getPhoto());
+		return storageService.getImage(customerById.getPhoto());
 	}
 
 	@Override
 	public void updatePhotoCustomer(Long id, MultipartFile file) throws CrmStorageException, CrmDataException {
 		String photo;
 		try {
-			photo = storageService.putObject(id, file.getOriginalFilename(), file.getContentType(), file.getSize(), file.getInputStream());
+			photo = storageService.putImage(id, file.getOriginalFilename(), file.getContentType(), file.getSize(), file.getInputStream());
 		} catch (SdkClientException | IOException e) {
 			throw new CrmStorageException(e.getMessage());
 		}
@@ -109,14 +101,14 @@ public class CustomerServiceImpl implements CustomerService {
 		List<Customer> toInsert = new ArrayList<>();
 		try {
 			User currentUser = authService.getCurrentUser();
-			String key = storageService.putObject(StorageServiceImpl.BUCKET_CSV, currentUser.getId(), file.getOriginalFilename(), file.getContentType(), file.getSize(), file.getInputStream());
+			String key = storageService.putObjet(StorageServiceImpl.BUCKET_CSV, currentUser.getId(), file.getOriginalFilename(), file.getContentType(), file.getSize(), file.getInputStream());
 			csvService.process(result, toInsert, key);
 			int[] ints = dao.insertBatch(toInsert, currentUser.getId());
 			emailService.sendCSVResult(result, toInsert.size(), ints.length, currentUser, key);
 
 		} catch (UnregisteredUserException e) {
 			throw new CrmDataException("fail to create customers, user not found.");
-		} catch (IOException e) {
+		} catch (IOException | DataAccessException |SdkClientException e) {
 			throw new CrmDataException("fail to create customers");
 		}
 		return result;
