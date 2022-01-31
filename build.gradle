@@ -55,3 +55,8 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
