@@ -3,9 +3,12 @@ package com.tam.crm.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
 public class Customer extends UpdateCustomer {
 	Long id;
 	String photo;
