@@ -23,7 +23,7 @@ public class StorageServiceImpl implements StorageService {
 	@Autowired
 	private AmazonS3 s3;
 	@Value("${minio.bucket}")
-	private String bucket;
+	protected String bucket;
 	public static final String BUCKET_CSV = "csv";
 
 	@Override public List<S3ObjectSummary> listObjects(String bucket) {
@@ -37,13 +37,13 @@ public class StorageServiceImpl implements StorageService {
 
 	@Override
 	public void getObject(String bucket, String key, ServletOutputStream outputStream) throws IOException {
-		S3Object object1 = s3.getObject(bucket, key);
+		S3Object object1 = getObject(bucket, key);
 		IOUtils.copy(object1.getObjectContent(), outputStream);
 	}
 
 	@Override
 	public S3Object getImage(String key) {
-		return s3.getObject(bucket, key);
+		return getObject(bucket, key);
 	}
 	@Override
 	public S3Object getObject(String bucket, String key) {
