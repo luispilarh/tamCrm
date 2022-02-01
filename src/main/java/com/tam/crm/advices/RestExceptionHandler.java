@@ -29,10 +29,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleException(AmazonS3Exception ex, WebRequest request) {
 		log.error(ex.getMessage(), ex);
 
-		AppError server_error = generateAppError(ex, "Server error", request);
-		server_error.setExceptionMessage("object not found");
+		AppError appError = generateAppError(ex, "Server error", request);
+		appError.setExceptionMessage("problem with blob storage");
 		return handleExceptionInternal(ex,
-			server_error,
+			appError,
 			new HttpHeaders(),
 			HttpStatus.INTERNAL_SERVER_ERROR,
 			request);

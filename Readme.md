@@ -44,10 +44,11 @@ To test it, you have to follow simple steps:
 
 ### Personal workflow
 
-This comand upper server minio and postgre and next use
+This command upper server minio and postgres 
+    
     docker-compose up --profile dev
 
-Run de app using gradle and local profile
+Run de app using gradle with local profile
 
     gradle bootRun --args='--spring.profiles.active="local"
     
