@@ -30,5 +30,28 @@ To test it, you have to follow simple steps:
 - Run
     
       docker-compose up --profile all
-- Go to http://localhost:8080/swagger-ui/index.html
+- Go to http://localhost:8080/swagger-ui/index.htm
 
+## Tools and frameworks used
+- Spring boot
+- Intellij
+- Gradle
+- Minio
+- Postgres
+- Lombok
+- Mustache
+...
+
+### Personal workflow
+
+This comand upper server minio and postgre and next use
+    docker-compose up --profile dev
+
+Run de app using gradle and local profile
+
+    gradle bootRun --args='--spring.profiles.active="local"
+    
+###
+  Created 2 workflows in github actions
+  1. **build**, build and exec test and report to sonarcloud.io
+  2. **coverage report**, add report about coverage to every new pull request
