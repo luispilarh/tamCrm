@@ -15,12 +15,15 @@ services:
       - POSTGRES_PASSWORD
       - POSTGRES_USER
       - POSTGRES_URL
+      - MINIO_URL
       - MINIO_ROOT_USER
       - MINIO_ROOT_PASSWORD
       - MINIO_SITE_REGION
       - MINIO_BUCKET
       - CLIENT_ID
       - CLIENT_SECRET
+      - DOMAIN_NAME
+      - API_KEY
   dbpostgresql:
     profiles:
       - dev
@@ -54,22 +57,6 @@ services:
       - MINIO_ROOT_USER
       - MINIO_ROOT_PASSWORD
       - MINIO_SITE_REGION
-  #createbuckets:
-  #  image: minio/mc
-  #  profiles:
-  #    - dev
-  #    - all
-  #    - minio
-  #  depends_on:
-  #    - minio
-  #  entrypoint: >
-  #    /bin/sh -c "
-  #    /usr/bin/mc config host add myminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} --api S3v4;
-  #    /usr/bin/mc mb myminio/images;
-  #    /usr/bin/mc ls myminio;
-  #    /usr/bin/mc policy set public myminio/images;
-  #    exit 0;
-  #    "
 volumes:
   minio_data:
     driver: local

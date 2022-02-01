@@ -1,5 +1,6 @@
 package com.tam.crm.advices;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.tam.crm.exception.CrmDataException;
 import com.tam.crm.exception.UnregisteredUserException;
 import lombok.Getter;
@@ -23,6 +24,19 @@ import java.time.LocalDateTime;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private Log log = LogFactory.getLog(RestExceptionHandler.class);
+
+	@ExceptionHandler(value = { AmazonS3Exception.class })
+	protected ResponseEntity<Object> handleException(AmazonS3Exception ex, WebRequest request) {
+		log.error(ex.getMessage(), ex);
+
+		AppError server_error = generateAppError(ex, "Server error", request);
+		server_error.setExceptionMessage("object not found");
+		return handleExceptionInternal(ex,
+			server_error,
+			new HttpHeaders(),
+			HttpStatus.INTERNAL_SERVER_ERROR,
+			request);
+	}
 
 	@ExceptionHandler(value = { RuntimeException.class })
 	protected ResponseEntity<Object> handleException(RuntimeException ex, WebRequest request) {
