@@ -52,7 +52,7 @@ Run de app using gradle with local profile
 
     gradle bootRun --args='--spring.profiles.active="local"
     
-###
+### CI
   Created 2 workflows in github actions
   1. **build**, build and exec test and report to sonarcloud.io
   2. **coverage report**, add report about coverage to every new pull request
